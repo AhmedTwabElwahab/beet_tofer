@@ -4,10 +4,11 @@ namespace App\Imports;
 
 use App\Models\Device;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithValidation;
+use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class TransactionImport implements ToCollection, WithHeadingRow
 {
@@ -17,10 +18,20 @@ class TransactionImport implements ToCollection, WithHeadingRow
         {
             $deviceNumber = $row['device_number'] ?? null;
             $amount = $row['amount'] ?? null;
-            $date = $row['date'] ?? null;
+            $rawDate = $row['date'] ?? null;
 
-            if (!$deviceNumber || !$amount || !$date) {
+
+            if (!$deviceNumber || !$amount || !$rawDate) {
                 continue; // Skip invalid rows
+            }
+
+            if (is_numeric($rawDate))
+            {
+                // Excel numeric date
+                $date = Carbon::instance(ExcelDate::excelToDateTimeObject($rawDate));
+            } else {
+                // String date
+                $date = Carbon::createFromFormat('j/m/Y', $rawDate);
             }
 
             // Find device by device_number

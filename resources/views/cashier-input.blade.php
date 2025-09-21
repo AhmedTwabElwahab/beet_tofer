@@ -111,4 +111,23 @@ function addRow(section) {
     button.parentNode.insertBefore(newRow, button);
 }
 </script>
+
+<script>
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // يمنع الـ submit
+
+            // العناصر القابلة للتركيز (input, select, textarea, button)
+            const focusable = Array.from(document.querySelectorAll("input, select, textarea, button"))
+                .filter(el => !el.disabled && el.type !== "hidden");
+
+            const index = focusable.indexOf(document.activeElement);
+
+            // لو مش آخر عنصر → انقل للبعضه
+            if (index > -1 && index < focusable.length - 1) {
+                focusable[index + 1].focus();
+            }
+        }
+    });
+</script>
 @endsection

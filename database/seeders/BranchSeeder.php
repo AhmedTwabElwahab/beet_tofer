@@ -23,6 +23,7 @@ class BranchSeeder extends Seeder
             ['id' => 9,  'name' => 'توفير 9','cost_center'=>'108','acc_number'=>"1111010022"],
             ['id' => 10, 'name' => 'توفير 10','cost_center'=>'109','acc_number'=>"1111010023"],
             ['id' => 11, 'name' => 'توفير 11','cost_center'=>'111','acc_number'=>"1111010024"],
+            ['id' => 13, 'name' => 'توفير 13','cost_center'=>'113','acc_number'=>"1111010026"],
             ['id' => 12, 'name' => 'توفير 12','cost_center'=>'112','acc_number'=>"1111010025"],
             ['id' => 14, 'name' => 'توفير 14','cost_center'=>'114','acc_number'=>"1111010027"],
             ['id' => 16, 'name' => 'توفير 16','cost_center'=>'116','acc_number'=>"1111010033"],

@@ -4,6 +4,8 @@ use App\Http\Controllers\CashierEntryController;
 use App\Http\Controllers\CashierExportController;
 use App\Http\Controllers\CashierInputController;
 use App\Http\Controllers\TransactionImportController;
+use App\Models\cashierEntry;
+use App\Models\networkEntry;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,3 +27,10 @@ Route::post('/cashier-export', [CashierExportController::class, 'export'])->name
 // CashierEntry Export Routes
 Route::get('/cashierentry-export', [CashierEntryController::class, 'show'])->name('cashierentry.export.show');
 Route::post('/cashierentry-export', [CashierEntryController::class, 'export'])->name('cashierentry.export');
+
+
+Route::get('/delete', function () {
+   networkEntry::truncate();
+   cashierEntry::truncate();
+   return view('home');
+});
