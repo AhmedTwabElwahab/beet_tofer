@@ -18,7 +18,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            @for($section = 1; $section <= 15; $section++)
+            @for($section = 1; $section <= 13; $section++)
             <div class="border border-gray-200 rounded-lg p-4">
                 <h3 class="text-lg font-semibold mb-4 text-center">Section {{ $section }}</h3>
 
@@ -35,7 +35,7 @@
                 @for($row = 1; $row <= 3; $row++)
                 <div class="mb-4 border border-gray-200 p-3 rounded" data-row="{{ $row }}">
                     <div class="text-sm font-medium text-gray-600 mb-2">Row {{ $row }}</div>
-                    <div class="grid grid-cols-3 gap-2">
+                    <div class="grid grid-cols-5 gap-2">
                         <div>
                             <label class="text-xs text-gray-500">Cashier Number</label>
                             <input type="text" name="cashier_numbers[{{ $section }}][{{ $row }}]"
@@ -51,6 +51,18 @@
                         <div>
                             <label class="text-xs text-gray-500">Network Value</label>
                             <input type="number" step="0.01" name="network_values[{{ $section }}][{{ $row }}]"
+                                   class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                   placeholder="0.00">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500">Sales return</label>
+                            <input type="number" step="0.01" name="sales_return[{{ $section }}][{{ $row }}]"
+                                   class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                   placeholder="0.00">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500">Bond Number</label>
+                            <input type="number" step="0.01" name="bond_number[{{ $section }}][{{ $row }}]"
                                    class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                                    placeholder="0.00">
                         </div>

@@ -50,10 +50,17 @@ class CashierEntryController extends Controller
                     {
                         if(Carbon::parse($cashierInput->input_date)->toDateString() === Carbon::parse($date)->toDateString())
                         {
+                            $description = "إضافة مبيعات صناديق الكاشيرات الي الصندوق الوسيط بتاريخ ".$new_date;
+
+                            if ($cashierInput->bond_number != null)
+                            {
+                                $description = " ترحيل مبيعات صناديق الكاشيرات إلى الصندوق الوسيط عن يوم {$new_date} برقم السند {$cashierInput->bond_number}.";
+                            }
+
                             $entry = new cashierEntry();
                             $entry->account_number      = $branch->acc_number;
                             $entry->analytical_account  = $cashierInput->cashier_number;
-                            $entry->description         = "إضافة مبيعات صناديق الكاشيرات الي الصندوق الوسيط بتاريخ ".$new_date;
+                            $entry->description         = $description;
                             $entry->debit_local         = 0;
                             $entry->credit_local        = $cashierInput->cash_value;
                             $entry->cost_center         = $branch->cost_center;

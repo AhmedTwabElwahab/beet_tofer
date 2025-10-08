@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BalanceImportController;
+use App\Http\Controllers\CashierAuditController;
 use App\Http\Controllers\CashierEntryController;
 use App\Http\Controllers\CashierExportController;
 use App\Http\Controllers\CashierInputController;
@@ -15,6 +17,10 @@ Route::get('/', function () {
 // Transaction Import Routes
 Route::get('/transaction-import', [TransactionImportController::class, 'show'])->name('transaction.import.show');
 Route::post('/transaction-import', [TransactionImportController::class, 'import'])->name('transaction.import');
+
+// Balance Import Routes
+Route::get('/balance-import', [BalanceImportController::class, 'show'])->name('balance.import.show');
+Route::post('/balance-import', [BalanceImportController::class, 'import'])->name('balance.import');
 
 // Cashier Input Routes
 Route::get('/cashier-input', [CashierInputController::class, 'index'])->name('cashier.input.index');
@@ -34,3 +40,7 @@ Route::get('/delete', function () {
    cashierEntry::truncate();
    return view('home');
 });
+
+Route::get('/cashier_audits', [CashierAuditController::class, 'index'])->name('cashieraudits.index');
+Route::post('/cashier_audits', [CashierAuditController::class, 'export'])->name('cashieraudits.export');
+

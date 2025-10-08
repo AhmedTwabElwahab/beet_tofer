@@ -12,13 +12,14 @@ class CashierInput extends Model
         'branch_id',
         'cash_value',
         'network_value',
+        'sales_return',
         'input_date',
     ];
 
     protected $casts = [
-        'cash_value' => 'decimal:2',
-        'network_value' => 'decimal:2',
-        'input_date' => 'date',
+        'cash_value'        => 'decimal:2',
+        'network_value'     => 'decimal:2',
+        'input_date'        => 'date',
     ];
 
     /**

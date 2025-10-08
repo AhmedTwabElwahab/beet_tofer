@@ -47,7 +47,7 @@ class CashierExportController extends Controller
                             $entry = new networkEntry();
                             $entry->account_number      = "1112010002";
                             $entry->analytical_account  = 2;
-                            $entry->description         = "اقفال صناديق الكاشيرات مبيعات الشبكة بتاريخ ".$new_date;
+                            $entry->description         = "اقفال صناديق الكاشيرات مبيعات الشبكة بتاريخ ".$new_date ;
                             $entry->debit_local         = $transaction->amount;
                             $entry->credit_local        = 0;
                             $entry->cost_center         = $branch->cost_center;
