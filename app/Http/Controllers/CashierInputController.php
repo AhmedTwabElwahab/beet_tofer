@@ -23,7 +23,7 @@ class CashierInputController extends Controller
             'network_values' => 'required|array',
             'sales_return' => 'required|array',
             'global_date' => 'required|date',
-            'bond_number' => 'required|date',
+            'bond_number' => 'required|array',
         ]);
 
         $cashierNumbers = $request->input('cashier_numbers', []);
@@ -32,7 +32,7 @@ class CashierInputController extends Controller
         $networkValues = $request->input('network_values', []);
         $sales_return = $request->input('sales_return', []);
         $globalDate = $request->input('global_date');
-        $bond_number = $request->input('bond_number');
+        $bond_number = $request->input('bond_number', []);
 
         $recordsCreated = 0;
 

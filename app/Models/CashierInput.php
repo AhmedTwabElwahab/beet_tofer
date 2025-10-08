@@ -14,6 +14,7 @@ class CashierInput extends Model
         'network_value',
         'sales_return',
         'input_date',
+        'bond_number',
     ];
 
     protected $casts = [
