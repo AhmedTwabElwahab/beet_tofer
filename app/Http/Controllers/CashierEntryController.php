@@ -37,7 +37,7 @@ class CashierEntryController extends Controller
             $entry->description         = "إضافة مبيعات صناديق الكاشيرات الي الصندوق الوسيط بتاريخ ".$new_date;
             $entry->credit_local        = 0;
             $entry->debit_local         = 0;
-            $entry->cost_center         = '105';
+            $entry->cost_center         = '101';
             $entry->due_date            = $date;
             $entry->save();
 
@@ -54,7 +54,8 @@ class CashierEntryController extends Controller
 
                             if ($cashierInput->bond_number != null)
                             {
-                                $description = " ترحيل مبيعات صناديق الكاشيرات إلى الصندوق الوسيط عن يوم {$new_date} برقم السند {$cashierInput->bond_number}.";
+                                $bond_number = (int) floatval($cashierInput->bond_number);
+                                $description = "ترحيل مبيعات صناديق الكاشيرات إلى الصندوق الوسيط عن يوم {$new_date} برقم السند {$bond_number}";
                             }
 
                             $entry = new cashierEntry();
