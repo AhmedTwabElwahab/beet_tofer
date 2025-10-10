@@ -5,6 +5,7 @@ use App\Http\Controllers\CashierAuditController;
 use App\Http\Controllers\CashierEntryController;
 use App\Http\Controllers\CashierExportController;
 use App\Http\Controllers\CashierInputController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\TransactionImportController;
 use App\Models\cashierEntry;
 use App\Models\networkEntry;
@@ -24,7 +25,11 @@ Route::post('/balance-import', [BalanceImportController::class, 'import'])->name
 
 // Cashier Input Routes
 Route::get('/cashier-input', [CashierInputController::class, 'index'])->name('cashier.input.index');
+Route::get('/cashier-input/create', [CashierInputController::class, 'create'])->name('cashier.input.create');
 Route::post('/cashier-input', [CashierInputController::class, 'store'])->name('cashier.input.store');
+Route::get('/cashier-input/{date}/edit', [CashierInputController::class, 'edit'])->name('cashier.input.edit');
+Route::put('/cashier-input/{date}', [CashierInputController::class, 'update'])->name('cashier.input.update');
+Route::delete('/cashier-input/{date}', [CashierInputController::class, 'destroy'])->name('cashier.input.destroy');
 
 // Cashier Export Routes
 Route::get('/cashier-export', [CashierExportController::class, 'show'])->name('cashier.export.show');
@@ -41,6 +46,10 @@ Route::get('/delete', function () {
    return view('home');
 });
 
-Route::get('/cashier_audits', [CashierAuditController::class, 'index'])->name('cashieraudits.index');
+Route::get('/cashier_audits', [CashierAuditController::class, 'exportShow'])->name('cashieraudits.index');
 Route::post('/cashier_audits', [CashierAuditController::class, 'export'])->name('cashieraudits.export');
 
+// مسارات CRUD لـ Device
+Route::resource('devices', DeviceController::class);
+
+Route::resource('balance-audits', CashierAuditController::class);

@@ -8,11 +8,60 @@ use Illuminate\Http\Request;
 
 class CashierInputController extends Controller
 {
-    public function index()
+    public function index(Request $request)
+    {
+        $query = CashierInput::with('branch')->latest();
+
+        // فلترة حسب التاريخ
+        if ($request->has('filter_date') && $request->filter_date != '') {
+            $query->whereDate('input_date', $request->filter_date);
+        }
+
+        $cashierInputs = $query->paginate(15)->withQueryString(); // يحافظ على قيمة الفلتر عند التنقل بين الصفحات
+
+        return view('cashier_inputs.index', compact('cashierInputs'));
+    }
+
+    public function create()
     {
         $branches = Branch::all();
-        return view('cashier-input', compact('branches'));
+        return view('cashier_inputs.create', compact('branches'));
     }
+
+    public function edit($id)
+    {
+        $cashierInput = CashierInput::findOrFail($id);
+        $branches = Branch::all();
+
+        return view('cashier_inputs.edit', compact('cashierInput', 'branches'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'input_date'        => 'required|date',
+            'branch_id'         => 'required|exists:branches,id',
+            'cashier_number'    => 'required|string|max:50',
+            'cash_value'        => 'required|numeric|min:0',
+            'network_value'     => 'required|numeric|min:0',
+            'sales_return'      => 'required|numeric|min:0',
+            'bond_number'      => 'required|numeric|min:0',
+        ]);
+
+        $cashierInput = CashierInput::findOrFail($id);
+        $cashierInput->update([
+            'input_date' => $request->input_date,
+            'branch_id' => $request->branch_id,
+            'cashier_number' => $request->cashier_number,
+            'cash_value' => $request->cash_value,
+            'network_value' => $request->network_value,
+            'sales_return' => $request->sales_return,
+            'bond_number' => $request->bond_number,
+        ]);
+
+        return redirect()->route('cashier.input.index')->with('success', 'تم تحديث السجل بنجاح ✅');
+    }
+
 
     public function store(Request $request)
     {
@@ -62,5 +111,14 @@ class CashierInputController extends Controller
         }
 
         return redirect()->back()->with('success', "Successfully saved {$recordsCreated} cashier input records!");
+    }
+
+    public function destroy($id)
+    {
+        $input = CashierInput::findOrFail($id);
+        $input->delete();
+
+        return redirect()->route('cashier.input.index')
+            ->with('success', 'تم حذف السجل بنجاح ✅');
     }
 }

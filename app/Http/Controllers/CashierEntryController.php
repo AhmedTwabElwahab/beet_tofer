@@ -16,6 +16,8 @@ class CashierEntryController extends Controller
         return view('cashierEntry-export');
     }
 
+
+
     public function export(Request $request)
     {
         $request->validate([
@@ -52,7 +54,7 @@ class CashierEntryController extends Controller
                         {
                             $description = "إضافة مبيعات صناديق الكاشيرات الي الصندوق الوسيط بتاريخ ".$new_date;
 
-                            if ($cashierInput->bond_number != null)
+                            if ($cashierInput->bond_number != null && $cashierInput->bond_number != "" && $cashierInput->bond_number != "0")
                             {
                                 $bond_number = (int) floatval($cashierInput->bond_number);
                                 $description = "ترحيل مبيعات صناديق الكاشيرات إلى الصندوق الوسيط عن يوم {$new_date} برقم السند {$bond_number}";

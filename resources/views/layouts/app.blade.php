@@ -4,42 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Beet Tofer')</title>
+    {{-- استخدام Tailwind CSS --}}
     <script src="https://cdn.tailwindcss.com"></script>
+    {{-- يمكن إضافة خطوط Google Fonts هنا إذا أردت تصميم أكثر تميزًا --}}
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-blue-600 text-white shadow-lg">
-        <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between px-6 py-4">
-            {{-- شعار / عنوان النظام --}}
-            <h1 class="text-2xl font-bold mb-3 sm:mb-0">Beet Tofer System</h1>
+<body class="bg-gray-50 font-sans antialiased">
+{{-- الخلفية تم تعديلها من gray-100 إلى gray-50 لتكون أنظف وأكثر حداثة --}}
 
-            {{-- الروابط --}}
-            <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-sm sm:text-base">
-                <a href="/" class="hover:text-blue-200 transition-colors">Home</a>
-                <a href="{{ route('transaction.import.show') }}" class="hover:text-blue-200 transition-colors">Import Transactions</a>
-                <a href="{{ route('cashier.input.index') }}" class="hover:text-blue-200 transition-colors">Cashier Input</a>
-                <a href="{{ route('cashier.export.show') }}" class="hover:text-blue-200 transition-colors">Export Reports</a>
-                <a href="{{ route('cashierentry.export.show') }}" class="hover:text-blue-200 transition-colors">Export Entry Reports</a>
-                <a href="{{ route('balance.import.show') }}" class="hover:text-blue-200 transition-colors">Import Balances</a>
-                <a href="{{ route('cashieraudits.index') }}" class="hover:text-blue-200 transition-colors">Export Boxes Reports</a>
-            </div>
-        </div>
-    </nav>
+@include('layouts.nav')
 
-
-<main class="container mx-auto py-8">
+<main>
+    {{-- تنبيهات الرسائل (Messages/Alerts) --}}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                {{ session('success') }}
+            <div class="bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-lg shadow-md mb-4 flex items-center" role="alert">
+                <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="font-medium">{{ session('success') }}</span>
             </div>
         @endif
 
         @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                {{ session('error') }}
+            <div class="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg shadow-md mb-4 flex items-center" role="alert">
+                <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="font-medium">{{ session('error') }}</span>
             </div>
         @endif
+    </div>
 
-        @yield('content')
-    </main>
+    {{-- هنا سيتم تحميل محتوى كل صفحة، وستقوم الصفحات الداخلية بتحديد مساحتها (max-w-...) --}}
+    @yield('content')
+</main>
 </body>
 </html>

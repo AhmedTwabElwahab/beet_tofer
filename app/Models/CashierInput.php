@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class CashierInput extends Model
 {
@@ -26,8 +27,8 @@ class CashierInput extends Model
     /**
      * Get the branch that owns the cashier input.
      */
-    public function branch(): BelongsTo
+    public function branch(): HasOne
     {
-        return $this->belongsTo(Branch::class);
+        return $this->hasOne(Branch::class, 'id', 'branch_id');
     }
 }
