@@ -14,11 +14,15 @@ class CashierAuditBranchSheet implements FromCollection, WithTitle, WithEvents
 {
     protected $branchId;
     protected $date;
+    protected $from;
+    protected $to;
 
-    public function __construct($branchId, $date = null)
+    public function __construct($branchId, $date = null, $from = null, $to = null)
     {
         $this->branchId = $branchId;
         $this->date = $date;
+        $this->from = $from;
+        $this->to = $to;
     }
 
     public function collection()
@@ -49,15 +53,14 @@ class CashierAuditBranchSheet implements FromCollection, WithTitle, WithEvents
                 $sheet = $event->sheet->getDelegate();
                 $sheet->setRightToLeft(true);
 
-                // الكاشيرات
                 $cashiers = CashierInput::where('branch_id', $this->branchId)
                     ->select('cashier_number')
                     ->distinct()
                     ->pluck('cashier_number');
 
-                // التواريخ
                 $allDates = CashierInput::where('branch_id', $this->branchId)
                     ->when($this->date, fn($q) => $q->whereDate('input_date', $this->date))
+                    ->when($this->from && $this->to, fn($q) => $q->whereBetween('input_date', [$this->from, $this->to]))
                     ->select('input_date')
                     ->distinct()
                     ->orderBy('input_date', 'asc')
@@ -69,14 +72,12 @@ class CashierAuditBranchSheet implements FromCollection, WithTitle, WithEvents
                 foreach ($cashiers as $cashierNumber) {
                     $colLetter = $this->getExcelColumnName($startColIndex);
 
-                    // عنوان الكاشير
-                    $mergeEnd = $this->getExcelColumnName($startColIndex + 5); // تم تمديده ليشمل عمود المعادلة
+                    $mergeEnd = $this->getExcelColumnName($startColIndex + 5);
                     $sheet->mergeCells("{$colLetter}{$startRow}:{$mergeEnd}{$startRow}");
                     $sheet->setCellValue("{$colLetter}{$startRow}", "كاشير {$cashierNumber}");
                     $sheet->getStyle("{$colLetter}{$startRow}")->getFont()->setBold(true)->setSize(14);
                     $sheet->getStyle("{$colLetter}{$startRow}")->getAlignment()->setHorizontal('center');
 
-                    // رؤوس الأعمدة
                     $headers = ['تاريخ', 'رصيد', 'كاش', 'شبكة', 'مرتجع', 'الفرق'];
                     $rowHeader = $startRow + 1;
 
@@ -87,7 +88,6 @@ class CashierAuditBranchSheet implements FromCollection, WithTitle, WithEvents
                         $sheet->getStyle("{$headerCol}{$rowHeader}")->getAlignment()->setHorizontal('center');
                     }
 
-                    // بيانات الكاشير
                     $inputs = CashierInput::select(
                         'input_date',
                         DB::raw('SUM(cash_value) as total_cash'),
@@ -97,18 +97,19 @@ class CashierAuditBranchSheet implements FromCollection, WithTitle, WithEvents
                         ->where('branch_id', $this->branchId)
                         ->where('cashier_number', $cashierNumber)
                         ->when($this->date, fn($q) => $q->whereDate('input_date', $this->date))
+                        ->when($this->from && $this->to, fn($q) => $q->whereBetween('input_date', [$this->from, $this->to]))
                         ->groupBy('input_date')
                         ->orderBy('input_date', 'asc')
                         ->get()
                         ->keyBy(fn($i) => Carbon::parse($i->input_date)->format('Y-m-d'));
 
-                    // بيانات الرصيد
                     $balances = DB::table('cashier_audits')
                         ->where('branch_id', $this->branchId)
                         ->where('cashier_number', $cashierNumber)
+                        ->when($this->date, fn($q) => $q->whereDate('date', $this->date))
+                        ->when($this->from && $this->to, fn($q) => $q->whereBetween('date', [$this->from, $this->to]))
                         ->pluck('balance', 'date');
 
-                    // كتابة البيانات
                     $dataRow = $startRow + 2;
 
                     foreach ($allDates as $date) {
@@ -120,13 +121,11 @@ class CashierAuditBranchSheet implements FromCollection, WithTitle, WithEvents
                         $tx = $inputs[$d] ?? null;
                         $balance = $balances[$d] ?? '';
 
-                        // كتابة القيم
                         $sheet->setCellValue($this->getExcelColumnName($startColIndex + 1) . $dataRow, $balance);
                         $sheet->setCellValue($this->getExcelColumnName($startColIndex + 2) . $dataRow, $tx->total_cash ?? '');
                         $sheet->setCellValue($this->getExcelColumnName($startColIndex + 3) . $dataRow, $tx->total_network ?? '');
                         $sheet->setCellValue($this->getExcelColumnName($startColIndex + 4) . $dataRow, $tx->total_sales_return ?? '');
 
-                        // ✅ المعادلة: الرصيد - (الكاش + الشبكة + المرتجع)
                         $balanceCol = $this->getExcelColumnName($startColIndex + 1);
                         $cashCol = $this->getExcelColumnName($startColIndex + 2);
                         $networkCol = $this->getExcelColumnName($startColIndex + 3);
@@ -139,11 +138,9 @@ class CashierAuditBranchSheet implements FromCollection, WithTitle, WithEvents
                         $dataRow++;
                     }
 
-                    // فاصل بين الكاشيرات
-                    $startColIndex += 7; // 6 أعمدة بيانات + 1 فاصل
+                    $startColIndex += 7;
                 }
 
-                // عرض الأعمدة
                 for ($i = 1; $i < $startColIndex; $i++) {
                     $col = $this->getExcelColumnName($i);
                     $sheet->getColumnDimension($col)->setWidth(14);
