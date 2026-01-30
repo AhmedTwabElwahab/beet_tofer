@@ -5,6 +5,7 @@ use App\Http\Controllers\CashierAuditController;
 use App\Http\Controllers\CashierEntryController;
 use App\Http\Controllers\CashierExportController;
 use App\Http\Controllers\CashierInputController;
+use App\Http\Controllers\CashierUserController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\TransactionImportController;
 use App\Models\cashierEntry;
@@ -53,3 +54,5 @@ Route::post('/cashier_audits', [CashierAuditController::class, 'export'])->name(
 Route::resource('devices', DeviceController::class);
 
 Route::resource('balance-audits', CashierAuditController::class);
+
+Route::resource('cashiers', CashierUserController::class);
