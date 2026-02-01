@@ -34,4 +34,9 @@ class Branch extends Model
     {
         return $this->hasMany(CashierInput::class);
     }
+
+    public function metrics()
+    {
+        return $this->hasMany(branch_metrics::class);
+    }
 }

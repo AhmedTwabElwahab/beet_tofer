@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             BranchSeeder::class,
             DeviceSeeder::class,
             CashierUsersSeeder::class,
+            MetricsSeeder::class
         ]);
     }
 }

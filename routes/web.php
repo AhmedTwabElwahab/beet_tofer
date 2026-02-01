@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BalanceImportController;
+use App\Http\Controllers\BranchMetricsController;
 use App\Http\Controllers\CashierAuditController;
 use App\Http\Controllers\CashierEntryController;
 use App\Http\Controllers\CashierExportController;
