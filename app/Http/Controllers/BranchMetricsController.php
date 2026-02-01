@@ -8,6 +8,8 @@ use App\Models\metrics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Exports\BranchReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BranchMetricsController extends Controller
 {
@@ -77,5 +79,13 @@ class BranchMetricsController extends Controller
                 'error'   => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(
+            new BranchReportExport($request->date),
+            'branch_metrics_report.xlsx'
+        );
     }
 }

@@ -12,6 +12,9 @@ use App\Http\Controllers\TransactionImportController;
 use App\Models\cashierEntry;
 use App\Models\networkEntry;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BranchReportExport;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('home');
@@ -57,3 +60,6 @@ Route::resource('devices', DeviceController::class);
 Route::resource('balance-audits', CashierAuditController::class);
 
 Route::resource('cashiers', CashierUserController::class);
+
+Route::get('/metrics/export', [BranchMetricsController::class, 'export']);
+

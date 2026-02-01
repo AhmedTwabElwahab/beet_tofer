@@ -16,8 +16,8 @@ class CashierUsersSeeder extends Seeder
     public function run(): void
     {
         DB::table('cashier_users')->insert([
-            ['branch_id' => 1,  'cashier_number' => 2, 'user_id' => 101],
-            ['branch_id' => 1,  'cashier_number' => 3, 'user_id' => 102],
+            ['branch_id' => 21,  'cashier_number' => 2, 'user_id' => 2023],
+            ['branch_id' => 21,  'cashier_number' => 3, 'user_id' => 2025],
             ['branch_id' => 6,  'cashier_number' => 24, 'user_id' => 207],
             ['branch_id' => 6,  'cashier_number' => 25,  'user_id' => 208],
             ['branch_id' => 11,  'cashier_number' => 42,  'user_id' => 205],
@@ -35,8 +35,6 @@ class CashierUsersSeeder extends Seeder
             ['branch_id' => 12,  'cashier_number' => 45,  'user_id' => 220],
             ['branch_id' => 14,  'cashier_number' => 48,  'user_id' => 221],
             ['branch_id' => 14,  'cashier_number' => 49,  'user_id' => 222],
-            ['branch_id' => 13,  'cashier_number' => 47,  'user_id' => 224],
-            ['branch_id' => 13,  'cashier_number' => 46,  'user_id' => 223],
             ['branch_id' => 17,  'cashier_number' => 55,  'user_id' => 241],
             ['branch_id' => 17,  'cashier_number' => 54,  'user_id' => 242],
             ['branch_id' => 16,  'cashier_number' => 58,  'user_id' => 243],
